@@ -46,7 +46,6 @@ class Barres(ctk.CTkFrame):
         self.stats_frame = ctk.CTkFrame(self, fg_color="white", border_width=1, border_color="#D9DEE5", corner_radius=12)
         self.stats_frame.place(relx=0.025, rely=0.60, anchor="nw", relwidth=0.3, relheight=0.35)
 
-
         # Titre de l'encadré
         self.titre_stats = ctk.CTkLabel(self.stats_frame, text="Résumé statistique", font=("Arial", 20, "bold"), text_color="black")
         self.titre_stats.pack(pady=(12, 8))

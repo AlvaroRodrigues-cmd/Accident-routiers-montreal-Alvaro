@@ -6,7 +6,7 @@ import os
 import sys
 
 class DataHandler():
-    """Fait la gestion des fichiers et du DataFrame."""
+    """Fait la gestion des fichiers. Résponsable du chargement et de l'exportation des données."""
 
     def __init__(self):
         self.df = pd.DataFrame() # DataFrame initialement vide.
