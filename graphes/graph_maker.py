@@ -20,7 +20,6 @@ class GraphMaker(ctk.CTkFrame):
 
         # DataHandler
         self.handler = handler
-        self.graphe_df = pd.DataFrame()
 
     def create_graph(self, x, y, titre, label_y):
         # Effacer ancien graphique

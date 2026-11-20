@@ -10,6 +10,7 @@ from pages.aide import Aide
 from pages.circulaire import Circulaire
 from pages.graphique import Graphique
 from pages.barres import Barres
+from pages.carte_thermique import CarteThermique
 
 class MainApplication(ctk.CTk):
     """
@@ -35,6 +36,7 @@ class MainApplication(ctk.CTk):
         self.page_graphiques = Graphique(self, self.handler, fg_color="white")
         self.page_pie = Circulaire(self, self.handler, fg_color="white")
         self.page_barres = Barres(self, self.handler, fg_color="white")
+        self.page_carte = CarteThermique(self, self.handler, fg_color="white")
 
         #Placer pages
         self.page_accueil.grid(row=0, column=0, sticky="nsew")
@@ -42,6 +44,7 @@ class MainApplication(ctk.CTk):
         self.page_aide.grid(row=0, column=0, sticky="nsew")
         self.page_pie.grid(row=0, column=0, sticky="nsew")
         self.page_barres.grid(row=0, column=0, sticky="nsew")
+        self.page_carte.grid(row=0, column=0, sticky="nsew")
 
         self.page_actuelle = self.page_accueil
 
@@ -99,10 +102,11 @@ class MainApplication(ctk.CTk):
         #Liste de tuples avec le contenu des boutons
         pages = [("Évolution annuelle", "Visualiser l'évolution des collisions au fil des années.", self.page_graphiques),
         ("Graphique circulaire", "Analyser la répartition des collisions selon leur gravité.", self.page_pie),
-        ("Graphique à barres", "Comparer différentes catégories de collisions.", self.page_barres)]
+        ("Graphique à barres", "Comparer différentes catégories de collisions.", self.page_barres),
+        ("Carte Thermique", "Visualiser la fréquence des collisions à chaque journée.", self.page_carte)]
 
         #Mettre les icones des 3 gros boutons dans une variable
-        icones = ["icone_evolution.png", "icone_circulaire.png", "icone_barres.png"]
+        icones = ["icone_evolution.png", "icone_circulaire.png", "icone_barres.png", "icone_barres.png"]
 
         #Pour garder les icones en mémoire
         self.icones_accueil = []
@@ -170,7 +174,8 @@ class MainApplication(ctk.CTk):
             self.page_graphiques,
             self.page_aide,
             self.page_pie,
-            self.page_barres
+            self.page_barres,
+            self.page_carte
         )
 
         # Masquer les pages inactives
@@ -257,3 +262,6 @@ class MainApplication(ctk.CTk):
 
         # Graphique à barres
         graphiques_menu.add_command(label="Graphique à barres", command=lambda: self.afficher_page(self.page_barres))
+
+        # Carte thermique
+        graphiques_menu.add_command(label="Carte thermique", command=lambda: self.afficher_page(self.page_carte))
