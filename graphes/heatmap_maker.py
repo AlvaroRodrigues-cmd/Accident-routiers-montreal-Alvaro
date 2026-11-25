@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import pandas as pd
 import numpy as np
 
 from matplotlib.figure import Figure
@@ -8,52 +9,140 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class HeatMapMaker(ctk.CTkFrame):
     def __init__(self, master, handler):
         super().__init__(master)
-        # Création de la figure.
-        self.figure = Figure(figsize=(7, 7))
+        # DataHandler
+        self.handler = handler
 
-        # Création des axes du graphique.
+        # Création de la figure.
+        self.figure = Figure(figsize=(12, 6), dpi=100)
         self.ax = self.figure.add_subplot(111)
+
+        # Barre de couleurs.
+        self.colorbar = None
 
         # Intégration du graphique dans CustomTkinter.
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
-        # DataHandler
-        self.handler = handler
-        self.create_heatmap()
+    def create_heatmap(self, pivot_table, params):
+        # Effacer ancien carte thermique.
+        self.ax.clear()
 
-    def create_heatmap(self):
-        # Effacer ancien graphique.
-        # self.ax.clear()
+        # Créer la carte thermique à partir des données.
+        im = self.ax.imshow(pivot_table.values, cmap="YlOrRd", aspect="auto")
 
-        testarr = np.random.randint(0, 15, size=(7, 24))
-
-        # Intensité couleurs.
-        colors = ["#264653", "#2A9D8F", "#E9C46A", "#F4A261", "#E76F51"]
-        custom_cmap = LinearSegmentedColormap.from_list("custom_gradient", colors)
-        
-        im = self.ax.imshow(testarr, cmap=custom_cmap)
-
-        # Créer la barre de couleurs de fréquences.
-        cbar = self.figure.colorbar(im, ax=self.ax, orientation="horizontal")
-        cbar.set_label("Fréquence des collisions")
-
-        # Titre du graphique et des axes.
-        self.ax.set_title("Fréquence d'accidents à chaque journée en 24 heures")
-        self.ax.set_xlabel("Heures de la journée")
-        self.ax.set_ylabel("Journées de la semaine")
-
-        # Noms des journées.
-        n_journees = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
-
-        # Titre des lignes et des colonnes.
+        # Définir les heures sur l'axe horizontal.
         self.ax.set_xticks(range(24))
-        self.ax.set_yticks(range(len(n_journees)), labels=n_journees)
+        self.ax.set_xticklabels(range(24))
 
-        # Ajouter le texte de numéro de fréquences dans chaque case.
-        for i in range(len(n_journees)):
-            for j in range(24):
-                self.ax.text(j, i, testarr[i, j], ha="center", va="center", color="w")
+        # Définir les jours sur l'axe vertical
+        self.ax.set_yticks(
+            range(7),
+            labels=[
+                "Lundi", "Mardi", "Mercredi",
+                "Jeudi", "Vendredi", "Samedi", "Dimanche"
+            ]
+        )
 
-    def update_heatmap(self):
-        self.create_heatmap()
+        # Ajouter les titres des axes.
+        self.ax.set_xlabel("Heure")
+        self.ax.set_ylabel("Jour")
+
+        # Ajouter le titre du graphique.
+        self.ax.set_title(f"{params[0]} par jour et par heure au mois de {params[1]} en {params[2]}")
+
+        # Créer la barre de couleurs une seule fois
+        if self.colorbar is None:
+            self.colorbar = self.figure.colorbar(
+                im,
+                ax=self.ax,
+                orientation="horizontal"
+            )
+            self.colorbar.set_label("Fréquence des collisions")
+        else:
+            # Actualiser la barre de couleurs existante
+            self.colorbar.update_normal(im)
+
+        # Actualiser le graphique.
+        self.canvas.draw_idle()
+
+    def update_heatmap(self, annee, mois, type_victimes):
+        # Si les données ne sont pas chargées, arrêter l'éxecution.
+        if self.handler.df.empty:
+            return
+
+        # Dictionnaire associant les mois à leur numéro.
+        mois_dict = {
+            "Janvier": 1,
+            "Février": 2,
+            "Mars": 3,
+            "Avril": 4,
+            "Mai": 5,
+            "Juin": 6,
+            "Juillet": 7,
+            "Août": 8,
+            "Septembre": 9,
+            "Octobre": 10,
+            "Novembre": 11,
+            "Décembre": 12
+        }
+
+        # Copier le DataFrame.
+        resultat = self.handler.df.copy()
+
+        # Garder seulement les accidents de l'année sélectionnée
+        resultat = resultat[resultat["AN"] == int(annee)]
+
+        # Transformer la date de l'accident en datetime.
+        # Ensuite filtrer le DataFrame par mois.
+        resultat["DT_ACCDN"] = pd.to_datetime(resultat["DT_ACCDN"]) 
+        resultat = resultat[resultat["DT_ACCDN"].dt.month == mois_dict[mois]]
+
+        # Extraire l'heure de chaque accident
+        resultat["HEURE"] = pd.to_numeric(resultat["HEURE_ACCDN"].str[:2], errors="coerce")
+
+        # Dico d'équivalence pour les noms de colonnes du DataFrame.
+        colonnes = {
+            "Nombre de morts": "NB_MORTS",
+            "Nombre de blessés graves": "NB_BLESSES_GRAVES",
+            "Nombre de blessés légers": "NB_BLESSES_LEGERS",
+            "Nombre total de victimes": "NB_VICTIMES_TOTAL",
+            "Nombre de victimes piétons": "NB_VICTIMES_PIETON",
+            "Nombre de victimes moto": "NB_VICTIMES_MOTO",
+            "Nombre de victimes vélo": "NB_VICTIMES_VELO"
+        }
+
+        # Déterminer la valeur à utiliser selon le choix de l'utilisateur.
+        if type_victimes == "Nombre de collisions":
+            # Chaque ligne représente une collision.
+            resultat["VALEUR"] = 1
+        else:
+            # Récupérer la colonne correspondant au type sélectionné.
+            resultat["VALEUR"] = resultat[colonnes[type_victimes]]
+
+        # Créer un tableau croisé dynamique.
+        # Les lignes représentent les jours.
+        # Les colonnes représentent les heures.
+        # Les valeurs sont additionnées.
+
+        df_pivot = resultat.pivot_table(
+            index="JR_SEMN_ACCDN",
+            columns="HEURE",
+            values="VALEUR",
+            aggfunc="sum",
+            fill_value=0
+        )
+
+        # Liste des jours de la semaine dans l'ordre.
+        jours = ["LU", "MA", "ME", "JE", "VE", "SA", "DI"]
+
+        # S'assurer que les 7 jours et les 24 heures sont présents.
+        df_pivot = df_pivot.reindex(index=jours, columns=range(24), fill_value=0)
+
+        # Réinitialiser le graphique.
+        self.create_heatmap(df_pivot, (type_victimes, mois, annee))
+
+        # Préparer les données pour l'exportation CSV
+        self.handler.df_resultats = df_pivot.reset_index()
+
+        # Préparer le graphique pour l'exportation PNG.
+        self.handler.graph_resultat = self.figure

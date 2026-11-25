@@ -33,7 +33,6 @@ class PieMaker(ctk.CTkFrame):
         #afficher les categories sous forme de  legende
         self.ax.legend(row,title = "Catégories", loc ="lower right", bbox_to_anchor=(1.05, 0.03), fontsize=10)
 
-
         #pour l'affichage du cercle pour qu'il reste un cercle
         self.ax.axis('equal')
 

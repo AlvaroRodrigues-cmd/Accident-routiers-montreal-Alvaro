@@ -7,13 +7,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class BarMaker(ctk.CTkFrame):
     def __init__(self, master, handler):
         super().__init__(master)
-        # Création de la figure
-        self.figure = Figure(figsize=(7, 4))
+        # Création de la figure.
+        self.figure = Figure(figsize=(7, 4), dpi=100)
 
-        # Création des axes du graphique
+        # Création des axes du graphique.
         self.ax = self.figure.add_subplot(111)
 
-        # Intégration du graphique dans CustomTkinter
+        # Intégration du graphique dans CustomTkinter.
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
@@ -21,13 +21,17 @@ class BarMaker(ctk.CTkFrame):
         self.handler = handler
 
     def create_graph(self,pivot_df):
-        #pour enlever l'ancien graphique
+        # Pour enlever l'ancien graphique.
         self.ax.clear()
 
-        #créer le graphe à bar
+        # Créer le graphe à barres.
         pivot_df.plot(kind = 'bar', ax =self.ax, width = 0.8)
+
+        # Titre des axes.
         self.ax.set_xlabel("Mois")
         self.ax.set_ylabel("Nombre total de victimes")
+
+        # La grille du graphique et la légende.
         self.ax.grid(axis='y', linestyle="--", alpha=0.7)
         self.ax.legend(loc='lower left', bbox_to_anchor=(0.5, -0.4), ncol= 2)
 

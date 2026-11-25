@@ -27,7 +27,7 @@ class Barres(ctk.CTkFrame):
         self.selection_type = tk.StringVar(value= options_type[0])
 
         # Création du prèmier bouton dropdown (années).
-        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees_bar, values=options_annees, command=lambda val:self.barres_graphe.update_bar(self.selection_annees_bar.get(), self.selection_type.get(),self.texte_stats), font=("Arial", 13), corner_radius=8, height=36)
+        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees_bar, values=options_annees, command=self.actualiser_barres, font=("Arial", 13), corner_radius=8, height=36)
         menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
 
         # Titre du bouton 1.
@@ -35,7 +35,7 @@ class Barres(ctk.CTkFrame):
         TitreMenuDeroulantGraphique.place(relx=0.125, rely=0.05, anchor="center")
 
         # Création du déuxieme bouton dropdown (types de victimes).
-        menuDeroulantGraphique2 = ctk.CTkOptionMenu(self, variable=self.selection_type, values=options_type, command=lambda val:self.barres_graphe.update_bar(self.selection_annees_bar.get(), self.selection_type.get(),self.texte_stats), font=("Arial", 13), corner_radius=8, height=36)
+        menuDeroulantGraphique2 = ctk.CTkOptionMenu(self, variable=self.selection_type, values=options_type, command=self.actualiser_barres, font=("Arial", 13), corner_radius=8, height=36)
         menuDeroulantGraphique2.place(relx=0.025, rely=0.25, anchor="nw", relwidth=0.2)
 
         # Titre du bouton 2.
@@ -53,3 +53,11 @@ class Barres(ctk.CTkFrame):
         # Texte des statistiques
         self.texte_stats = ctk.CTkLabel(self.stats_frame, text="Chargez un fichier CSV", font=("Arial", 18), text_color="black", justify="left", anchor="w")
         self.texte_stats.pack(fill="x", padx=12, pady=8)
+
+    def actualiser_barres(self, value=None):
+        # Actualiser le graphique à barres avec les sélections.
+        self.barres_graphe.update_bar(
+            self.selection_annees_bar.get(),
+            self.selection_type.get(),
+            self.texte_stats
+        )

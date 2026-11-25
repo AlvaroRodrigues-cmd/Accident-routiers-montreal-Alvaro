@@ -106,7 +106,7 @@ class MainApplication(ctk.CTk):
         ("Carte Thermique", "Visualiser la fréquence des collisions à chaque journée.", self.page_carte)]
 
         #Mettre les icones des 3 gros boutons dans une variable
-        icones = ["icone_evolution.png", "icone_circulaire.png", "icone_barres.png", "icone_barres.png"]
+        icones = ["icone_evolution.png", "icone_circulaire.png", "icone_barres.png", "icone_carte.png"]
 
         #Pour garder les icones en mémoire
         self.icones_accueil = []
@@ -203,31 +203,22 @@ class MainApplication(ctk.CTk):
 
         if self.handler.df.empty:
             return
-
+        
         if self.page_actuelle == self.page_graphiques:
-            self.page_graphiques.graph.update_graph(
-                self.page_graphiques.selection.get(),
-                self.page_graphiques.texte_stats
-            )
-
+            self.page_graphiques.actualiser_graphique()
         elif self.page_actuelle == self.page_pie:
-            self.page_pie.pie_graph.update_pie(
-                self.page_pie.selection_annees.get(),
-                self.page_pie.texte_stats
-            )
-
+            self.page_pie.actualiser_circulaire()
         elif self.page_actuelle == self.page_barres:
-            self.page_barres.barres_graphe.update_bar(
-                self.page_barres.selection_annees_bar.get(),
-                self.page_barres.selection_type.get(),
-                self.page_barres.texte_stats
-            )
+            self.page_barres.actualiser_barres()
+        elif self.page_actuelle == self.page_carte:
+            self.page_carte.actualiser_carte()
                 
     def charger_et_actualiser(self):
         if self.handler.charger_csv():
-            self.page_graphiques.graph.update_graph(self.page_graphiques.selection.get(), self.page_graphiques.texte_stats)
-            self.page_pie.pie_graph.update_pie(self.page_pie.selection_annees.get(), self.page_pie.texte_stats)
-            self.page_barres.barres_graphe.update_bar(self.page_barres.selection_annees_bar.get(),self.page_barres.selection_type.get(),self.page_barres.texte_stats)
+            self.page_graphiques.actualiser_graphique()
+            self.page_pie.actualiser_circulaire()
+            self.page_barres.actualiser_barres()
+            self.page_carte.actualiser_carte()
 
         # Actualiser un autre fois pour assurer que les données viennent de la page courante.
         self.actualiser_page_active()

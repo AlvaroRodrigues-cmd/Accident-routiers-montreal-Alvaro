@@ -93,10 +93,12 @@ class Aide(ctk.CTkFrame):
         "Sélectionnez une année et un type de victime dans les menu déroulant. Chaque barre représente le nombre de victime dans un mois de l'année sélectionnée.",
         ["barres.png"])
 
-        ajouter_section("6. Exporter les données en CSV", "L'objectif de cette fonctionnalité est de permettre l'enregistrement des données représentées dans le graphique.\n\n"
+        # ajouter_section("6. Carte thermique", "aaa", [])
+
+        ajouter_section("7. Exporter les données en CSV", "L'objectif de cette fonctionnalité est de permettre l'enregistrement des données représentées dans le graphique.\n\n"
         "Vous pouvez utiliser le menu « Fichier », sélectionner l'option Sauvegarder Données, puis choisir le nom et l'emplacement du fichier CSV.",
         ["export_csv1.png","export_csv2.png"])
 
-        ajouter_section("7. Enregistrer un graphique en PNG", "Une fonctionnalité d'exportation permet de sauvegarder le graphique affiché sous forme d'image PNG.\n\n"
+        ajouter_section("8. Enregistrer un graphique en PNG", "Une fonctionnalité d'exportation permet de sauvegarder le graphique affiché sous forme d'image PNG.\n\n"
         "Vous pourrez ainsi réutiliser le graphique dans des présentations, des rapports ou d'autres documents. Sélectionner l'option Sauvegarder Graphique, puis choisir le nom et l'emplacement du fichier PNG.",
         ["export_png1.png", "export_png2.png"])

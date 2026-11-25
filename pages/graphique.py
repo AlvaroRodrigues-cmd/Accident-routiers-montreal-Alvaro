@@ -25,7 +25,7 @@ class Graphique(ctk.CTkFrame):
         self.selection = tk.StringVar(value=options[0])
 
         # Menu déroulant
-        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection, values=options, command=lambda choix: self.graph.update_graph(choix, self.texte_stats), font=("Arial", 13), corner_radius=8, height=36)
+        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection, values=options, command=self.actualiser_graphique, font=("Arial", 13), corner_radius=8, height=36)
         menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
 
         # Label du menu déroulant
@@ -43,3 +43,10 @@ class Graphique(ctk.CTkFrame):
         # Texte des statistiques
         self.texte_stats = ctk.CTkLabel(self.stats_frame, text="Chargez un fichier CSV", font=("Arial", 13), text_color="black", justify="left", anchor="w")
         self.texte_stats.pack(fill="x", padx=12, pady=8)
+
+    def actualiser_graphique(self, value=None):
+        # Actualiser le graphique annuelle avec les sélections
+        self.graph.update_graph(
+            self.selection.get(),
+            self.texte_stats
+        )

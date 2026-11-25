@@ -22,7 +22,7 @@ class Circulaire(ctk.CTkFrame):
         self.selection_annees = tk.StringVar(value = options_annees[0])
         
         # Créer bouton dropdown.
-        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees, values=options_annees, command=lambda choix: self.pie_graph.update_pie(choix, self.texte_stats), font=("Arial", 13), corner_radius=8, height=36)
+        menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees, values=options_annees, command=self.actualiser_circulaire, font=("Arial", 13), corner_radius=8, height=36)
         menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
 
         # Titre du graphique.
@@ -41,3 +41,9 @@ class Circulaire(ctk.CTkFrame):
         self.texte_stats = ctk.CTkLabel(self.stats_frame, text="Chargez un fichier CSV", font=("Arial", 15), text_color="black", justify="left", anchor="w", wraplength=390)
         self.texte_stats.pack(fill="x", padx=15, pady=8)
 
+    def actualiser_circulaire(self, value=None):
+        # Actualiser le graphique circulaire avec les sélections
+        self.pie_graph.update_pie(
+            self.selection_annees.get(),
+            self.texte_stats
+        )
