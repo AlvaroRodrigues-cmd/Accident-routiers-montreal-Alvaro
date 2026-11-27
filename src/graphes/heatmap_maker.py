@@ -14,7 +14,7 @@ class HeatMapMaker(ctk.CTkFrame):
         self.figure = Figure(figsize=(12, 6), dpi=100)
         self.ax = self.figure.add_subplot(111)
 
-        # Barre de couleurs.
+        # Barre de couleurs, initialement vide.
         self.colorbar = None
 
         # Intégration du graphique dans CustomTkinter.
@@ -22,7 +22,7 @@ class HeatMapMaker(ctk.CTkFrame):
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
         # Message de départ.
-        self.afficher_message("Chargez un fichier CSV.")
+        self.afficher_message("Chargez un fichier CSV")
 
     def create_heatmap(self, pivot_table, params):
         # Effacer ancien carte thermique.
@@ -66,7 +66,7 @@ class HeatMapMaker(ctk.CTkFrame):
         # Actualiser le graphique.
         self.canvas.draw_idle()
 
-    def update_heatmap(self, annee, mois, type_victimes):
+    def update_heatmap(self, annee, mois, type_victimes, texte_stats):
         # Si les données ne sont pas chargées, arrêter l'éxecution.
         if self.handler.df.empty:
             return
@@ -139,6 +139,11 @@ class HeatMapMaker(ctk.CTkFrame):
         # S'assurer que les 7 jours et les 24 heures sont présents.
         df_pivot = df_pivot.reindex(index=jours, columns=range(24), fill_value=0)
 
+        # Nouveau texte de statistiques.
+        texte = ("Total mois: \n\n"
+                 "Total année: \n\n"
+                 "Journée(s) record: ")
+
         # Réinitialiser le graphique.
         self.create_heatmap(df_pivot, (type_victimes, mois, annee))
 
@@ -147,6 +152,9 @@ class HeatMapMaker(ctk.CTkFrame):
 
         # Préparer le graphique pour l'exportation PNG.
         self.handler.graph_resultat = self.figure
+
+        # Changer le texte de statistiques.
+        texte_stats.configure(text=texte)
 
     def afficher_message(self, message):
         # Effacer l'ancien graphique.

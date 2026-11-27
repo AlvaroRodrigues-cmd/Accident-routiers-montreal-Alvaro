@@ -25,12 +25,13 @@ class Graphique(ctk.CTkFrame):
         self.selection = tk.StringVar(value=options[0])
 
         # Menu déroulant
+        menuDeroulant_y = 0.09
         menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection, values=options, command=self.actualiser_graphique, font=("Arial", 13), corner_radius=8, height=36)
-        menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
+        menuDeroulantGraphique.place(relx=0.025, rely=menuDeroulant_y, anchor="nw", relwidth=0.2)
 
         # Label du menu déroulant
         TitreMenuDeroulantGraphique = ctk.CTkLabel(self, text="Statistique à afficher", font=("Arial", 16, "bold"), text_color="black", fg_color="transparent")
-        TitreMenuDeroulantGraphique.place(relx=0.125, rely=0.05, anchor="center")
+        TitreMenuDeroulantGraphique.place(relx=0.125, rely=menuDeroulant_y - 0.025, anchor="center")
 
         # Encadré des statistiques
         self.stats_frame = ctk.CTkFrame(self, fg_color="white", border_width=1, border_color="#D9DEE5", corner_radius=12)

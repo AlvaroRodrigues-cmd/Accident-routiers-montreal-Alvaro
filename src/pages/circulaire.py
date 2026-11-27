@@ -22,12 +22,13 @@ class Circulaire(ctk.CTkFrame):
         self.selection_annees = tk.StringVar(value = options_annees[0])
         
         # Créer bouton dropdown.
+        menuDeroulant_y = 0.09
         menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees, values=options_annees, command=self.actualiser_circulaire, font=("Arial", 13), corner_radius=8, height=36)
-        menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
+        menuDeroulantGraphique.place(relx=0.025, rely=menuDeroulant_y, anchor="nw", relwidth=0.2)
 
         # Titre du graphique.
         TitreMenuDeroulantGraphique = ctk.CTkLabel(self, text="Année", font=("Arial", 16, "bold"), text_color="black", fg_color="transparent")
-        TitreMenuDeroulantGraphique.place(relx=0.125, rely=0.05, anchor="center")
+        TitreMenuDeroulantGraphique.place(relx=0.125, rely=menuDeroulant_y - 0.025, anchor="center")
 
         # Encadré des statistiques
         self.stats_frame = ctk.CTkFrame(self, fg_color="white", border_width=1, border_color="#D9DEE5", corner_radius=12)
