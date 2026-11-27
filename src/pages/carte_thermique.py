@@ -58,7 +58,7 @@ class CarteThermique(ctk.CTkFrame):
 
         # Encadré des statistiques
         self.stats_frame = ctk.CTkFrame(self, fg_color="white", border_width=1, border_color="#D9DEE5", corner_radius=12)
-        self.stats_frame.place(relx=0.025, rely=0.65, anchor="nw", relwidth=0.24, relheight=0.31)
+        self.stats_frame.place(relx=0.025, rely=0.65, anchor="nw", relwidth=0.30, relheight=0.31)
 
         # Titre de l'encadré
         self.titre_stats = ctk.CTkLabel(self.stats_frame, text="Résumé statistique", font=("Arial", 16, "bold"), text_color="black")
@@ -73,6 +73,7 @@ class CarteThermique(ctk.CTkFrame):
         self.carte.update_heatmap(
             self.selection_annee.get(),
             self.selection_mois.get(),
-            self.selection_type.get()
+            self.selection_type.get(),
+            self.texte_stats
         )
 
