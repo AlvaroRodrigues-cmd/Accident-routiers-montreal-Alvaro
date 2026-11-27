@@ -7,6 +7,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class PieMaker(ctk.CTkFrame):
     def __init__(self, master, handler):
         super().__init__(master)
+        # DataHandler
+        self.handler = handler
+        
         # Création de la figure
         self.figure = Figure(figsize=(7, 4))
 
@@ -17,8 +20,8 @@ class PieMaker(ctk.CTkFrame):
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
-        # DataHandler
-        self.handler = handler
+        # Message de départ.
+        self.afficher_message("Chargez un fichier CSV.")
 
     def create_graph(self, row, columns, titre):
         #pour enlever l'ancien graphique
@@ -31,7 +34,7 @@ class PieMaker(ctk.CTkFrame):
         self.ax.set_title(f"Gravité des accidents en {titre}", fontdict={"fontsize": 14, "weight": "bold"})
 
         #afficher les categories sous forme de  legende
-        self.ax.legend(row,title = "Catégories", loc ="lower right", bbox_to_anchor=(1.05, 0.03), fontsize=10)
+        self.ax.legend(row, title = "Catégories", loc ="lower right", bbox_to_anchor=(1.05, 0.03), fontsize=10)
 
         #pour l'affichage du cercle pour qu'il reste un cercle
         self.ax.axis('equal')
@@ -47,14 +50,18 @@ class PieMaker(ctk.CTkFrame):
         # Choix d'année. 
         annee = int(choix)
 
+        # Filtrer les années.
         df_annee = self.handler.df[self.handler.df['AN'] == annee]
+
         #pour grouper la gravité de l'accident à son totale
         resultat = df_annee.groupby("GRAVITE").size()
-          #Ne pas faire de graphique si il n'y a pas d'accidents dans l'année
+
+        # Ne pas faire de graphique si il n'y a pas d'accidents dans l'année
         if resultat.empty or resultat.sum() == 0:
             messagebox.showwarning("Aucune donnée", "Aucune collision enregistrée pour cette année.")
             return
         
+        # Sauvegarder les données en pourcentage.
         df_perc = resultat.replace({x: round((100 * x) / sum(resultat.values), 1) for x in resultat.values})
         self.handler.df_resultats = df_perc.reset_index(name=f"Pourcentage des valeurs en {annee}")
 
@@ -81,3 +88,21 @@ class PieMaker(ctk.CTkFrame):
 
         self.create_graph(row, columns, annee)
         self.handler.graph_resultat = self.figure
+
+    def afficher_message(self, message):
+        # Effacer l'ancien graphique.
+        self.ax.clear()
+
+        # Créer le texte au millieu du graphique.
+        self.ax.text(
+            0.5,
+            0.5,
+            message,
+            fontsize=16,
+            ha='center',
+            va='center', 
+            transform=self.ax.transAxes
+        )
+
+        # Cacher le graphique vide.
+        self.ax.axis("off")

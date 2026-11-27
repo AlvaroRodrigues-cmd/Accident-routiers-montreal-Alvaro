@@ -7,6 +7,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 class BarMaker(ctk.CTkFrame):
     def __init__(self, master, handler):
         super().__init__(master)
+        # DataHandler
+        self.handler = handler
+
         # Création de la figure.
         self.figure = Figure(figsize=(7, 4), dpi=100)
 
@@ -17,8 +20,8 @@ class BarMaker(ctk.CTkFrame):
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
-        # DataHandler
-        self.handler = handler
+        # Message de départ.
+        self.afficher_message("Chargez un fichier CSV.")
 
     def create_graph(self,pivot_df):
         # Pour enlever l'ancien graphique.
@@ -120,4 +123,22 @@ class BarMaker(ctk.CTkFrame):
 
         self.create_graph(accident_df)
         self.handler.graph_resultat = self.figure
+
+    def afficher_message(self, message):
+        # Effacer l'ancien graphique.
+        self.ax.clear()
+
+        # Créer le texte au millieu du graphique.
+        self.ax.text(
+            0.5,
+            0.5,
+            message,
+            fontsize=16,
+            ha='center',
+            va='center', 
+            transform=self.ax.transAxes
+        )
+
+        # Cacher le graphique vide.
+        self.ax.axis("off")
         

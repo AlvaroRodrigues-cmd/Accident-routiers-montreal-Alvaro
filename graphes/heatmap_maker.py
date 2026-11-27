@@ -1,9 +1,7 @@
 import customtkinter as ctk
 import pandas as pd
-import numpy as np
 
 from matplotlib.figure import Figure
-from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class HeatMapMaker(ctk.CTkFrame):
@@ -22,6 +20,9 @@ class HeatMapMaker(ctk.CTkFrame):
         # Intégration du graphique dans CustomTkinter.
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
+
+        # Message de départ.
+        self.afficher_message("Chargez un fichier CSV.")
 
     def create_heatmap(self, pivot_table, params):
         # Effacer ancien carte thermique.
@@ -146,3 +147,26 @@ class HeatMapMaker(ctk.CTkFrame):
 
         # Préparer le graphique pour l'exportation PNG.
         self.handler.graph_resultat = self.figure
+
+    def afficher_message(self, message):
+        # Effacer l'ancien graphique.
+        self.ax.clear()
+
+        # Si la barre de couleurs est visible, l'effacer.
+        if self.colorbar is not None:
+            self.colorbar.remove()
+            self.colorbar = None
+
+        # Créer le texte au millieu du graphique.
+        self.ax.text(
+            0.5,
+            0.5,
+            message,
+            fontsize=16,
+            ha='center',
+            va='center', 
+            transform=self.ax.transAxes
+        )
+
+        # Cacher le graphique vide.
+        self.ax.axis("off")
