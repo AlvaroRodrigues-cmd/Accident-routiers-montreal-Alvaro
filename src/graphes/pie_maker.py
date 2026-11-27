@@ -21,7 +21,7 @@ class PieMaker(ctk.CTkFrame):
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
         # Message de départ.
-        self.afficher_message("Chargez un fichier CSV.")
+        self.afficher_message("Chargez un fichier CSV")
 
     def create_graph(self, row, columns, titre):
         #pour enlever l'ancien graphique

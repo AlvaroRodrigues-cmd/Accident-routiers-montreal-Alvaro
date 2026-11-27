@@ -14,8 +14,9 @@ class Barres(ctk.CTkFrame):
 
     def creer_page_graphique_bar(self):
         # Créer et insérer le graphique de barres.
+        barres_y = 0.35
         self.barres_graphe = BarMaker(self, self.handler)
-        self.barres_graphe.place(relx=0.6, rely=0.35, anchor="center", relwidth=0.75, relheight=0.7)
+        self.barres_graphe.place(relx=0.6, rely=barres_y, anchor="center", relwidth=0.75, relheight=0.7)
 
         # Options pout les dropdowns.
         options_annees = ["2012","2013","2014","2015","2016","2017","2018","2019","2020","2021"]
@@ -27,20 +28,22 @@ class Barres(ctk.CTkFrame):
         self.selection_type = tk.StringVar(value= options_type[0])
 
         # Création du prèmier bouton dropdown (années).
+        menuDeroulant_y = barres_y - 0.26 
         menuDeroulantGraphique = ctk.CTkOptionMenu(self, variable=self.selection_annees_bar, values=options_annees, command=self.actualiser_barres, font=("Arial", 13), corner_radius=8, height=36)
-        menuDeroulantGraphique.place(relx=0.025, rely=0.09, anchor="nw", relwidth=0.2)
+        menuDeroulantGraphique.place(relx=0.025, rely=menuDeroulant_y, anchor="nw", relwidth=0.2)
 
         # Titre du bouton 1.
         TitreMenuDeroulantGraphique = ctk.CTkLabel(self, text="Année", font=("Arial", 16, "bold"), text_color="black", fg_color="transparent")
-        TitreMenuDeroulantGraphique.place(relx=0.125, rely=0.05, anchor="center")
+        TitreMenuDeroulantGraphique.place(relx=0.125, rely=menuDeroulant_y - 0.025, anchor="center")
 
         # Création du déuxieme bouton dropdown (types de victimes).
+        menuDeroulant2_y = menuDeroulant_y + 0.15
         menuDeroulantGraphique2 = ctk.CTkOptionMenu(self, variable=self.selection_type, values=options_type, command=self.actualiser_barres, font=("Arial", 13), corner_radius=8, height=36)
-        menuDeroulantGraphique2.place(relx=0.025, rely=0.25, anchor="nw", relwidth=0.2)
+        menuDeroulantGraphique2.place(relx=0.025, rely=menuDeroulant2_y, anchor="nw", relwidth=0.2)
 
         # Titre du bouton 2.
         TitreMenuDeroulantGraphique2 = ctk.CTkLabel(self, text="Type de victime", font=("Arial", 16, "bold"), text_color="black", fg_color="transparent")
-        TitreMenuDeroulantGraphique2.place(relx=0.125, rely=0.21, anchor="center")
+        TitreMenuDeroulantGraphique2.place(relx=0.125, rely= menuDeroulant2_y - 0.025, anchor="center")
 
         # Encadré des statistiques
         self.stats_frame = ctk.CTkFrame(self, fg_color="white", border_width=1, border_color="#D9DEE5", corner_radius=12)

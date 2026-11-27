@@ -14,7 +14,7 @@ class HeatMapMaker(ctk.CTkFrame):
         self.figure = Figure(figsize=(12, 6), dpi=100)
         self.ax = self.figure.add_subplot(111)
 
-        # Barre de couleurs.
+        # Barre de couleurs, initialement vide.
         self.colorbar = None
 
         # Intégration du graphique dans CustomTkinter.
@@ -22,7 +22,7 @@ class HeatMapMaker(ctk.CTkFrame):
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
         # Message de départ.
-        self.afficher_message("Chargez un fichier CSV.")
+        self.afficher_message("Chargez un fichier CSV")
 
     def create_heatmap(self, pivot_table, params):
         # Effacer ancien carte thermique.

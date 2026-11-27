@@ -22,7 +22,7 @@ class GraphMaker(ctk.CTkFrame):
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
 
         # Message de départ.
-        self.afficher_message("Chargez un fichier CSV.")
+        self.afficher_message("Chargez un fichier CSV")
 
     def create_graph(self, x, y, titre, label_y):
         # Effacer ancien graphique
